@@ -1,0 +1,6 @@
+#!/bin/bash
+
+pywalfox update &
+sudo make -C /home/kyle/packages/dwm clean install
+sudo make -C /home/kyle/packages/dmenu clean install 
+killall dwm
