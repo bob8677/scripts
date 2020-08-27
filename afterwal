@@ -1,4 +1,28 @@
-#!/bin/bash
+#!/bin/fish
+
+set lock_effect 
+set wal_effect --blur 2
+
+source $HOME/.cache/wal/colors-fish.sh
+
+multilockscreen -u $wallpaper $wal_effect $lock_effect --fx (echo $wal_effect | sed 's/ .*/,/; s/--//')(echo $lock_effect | sed 's/ .*//; s/--//')
+killall xss-lock
+xss-lock -- multilockscreen -l (echo $lock_effect | sed 's/ .*//; s/--//') --off 10s & disown
+
+switch (echo $wal_effect | sed 's/ .*//;')
+	case ''
+		feh --bg-fill "$HOME/.cache/multilock/1-eDP1/resize.png"
+	case --dim
+		feh --bg-fill "$HOME/.cache/multilock/1-eDP1/dim.png"
+	case --blur
+		feh --bg-fill "$HOME/.cache/multilock/1-eDP1/blur.png"
+	case --dimblur
+		feh --bg-fill "$HOME/.cache/multilock/1-eDP1/dimblur.png"
+	case --pixel
+		feh --bg-fill "$HOME/.cache/multilock/1-eDP1/pixel.png"
+	case --dimpixel
+		feh --bg-fill "$HOME/.cache/multilock/1-eDP1/dimpixel.png"
+end
 
 pywalfox update &
 sudo make -C /home/kyle/packages/dwm clean install
