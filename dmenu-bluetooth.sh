@@ -6,4 +6,4 @@ set choice (echo "$devices" | sed 's/ Device /\n/g; s/Device //; s/:[A-Z0-9][A-Z
 
 test "$choice" = "" && exit 0
 
-bluetoothctl connect (echo "$devices" | sed 's/ Device /\n/; s/Device //g' | awk "FNR == $choice"' {print $1}') && echo -n '' | dmenu -p 'connected ' || echo -n '' | dmenu -p 'connection failed '
+bluetoothctl connect (echo "$devices" | sed 's/Device //; s/ Device /\n/g' | awk "FNR == $choice"' {print $1}') && echo -n '' | dmenu -p 'connected ' || echo -n '' | dmenu -p 'connection failed '

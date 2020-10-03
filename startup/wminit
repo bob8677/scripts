@@ -1,0 +1,11 @@
+#!/bin/sh
+wal -R -n
+xmodmap .config/xmodmap &
+killall xcape
+xcape -e 'Mode_switch=Escape' &
+picom & 
+$HOME/.fehbg
+xset r rate 300 50 &
+/home/kyle/scripts/startdunst &
+/usr/lib/kdeconnectd &
+xss-lock -- lock.sh &

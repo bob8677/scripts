@@ -1,11 +1,13 @@
 #!/bin/fish
 
-set lock_effect
-set wal_effect --blur 1
+set lock_effect --blur 1
+set wal_effect 
 
 source $HOME/.cache/wal/colors-fish.sh
 
-multilockscreen -u $wallpaper $wal_effect $lock_effect --fx (echo $wal_effect | sed 's/ .*/,/; s/--//')(echo $lock_effect | sed 's/ .*//; s/--//')
+[ $wallpaper = 'None' ] && echo $argv[1] > $HOME/.cache/wal/wal
+
+multilockscreen -u (cat $HOME/.cache/wal/wal) $wal_effect $lock_effect --fx (echo $wal_effect | sed 's/ .*/,/; s/--//')(echo $lock_effect | sed 's/ .*//; s/--//')
 
 switch (echo $wal_effect | sed 's/ .*//;')
 	case ''
@@ -23,8 +25,11 @@ switch (echo $wal_effect | sed 's/ .*//;')
 end
 
 pywalfox update &
-sudo make -C /home/kyle/packages/dwm clean install
+#sudo make -C /home/kyle/packages/dwm clean install
 sudo make -C /home/kyle/packages/dmenu clean install 
-killall dwm
+#killall dwm
 
 echo "#!/bin/fish"\n"multilockscreen -l (echo $lock_effect | sed 's/ .*//; s/--//') --off 10s" > $HOME/scripts/lock.sh
+
+# cava
+cp $HOME/.cache/wal/cava $HOME/.config/cava/config

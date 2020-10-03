@@ -2,3 +2,4 @@
 
 curl wttr.in
 read -P ''
+
