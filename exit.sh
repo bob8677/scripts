@@ -1,6 +1,6 @@
 #!/bin/fish
 
-set action (echo Lock\nReboot\nShutdown\nSuspend\nExit | dmenu -i -p 'What Would You Like To Do?')
+set action (echo Lock\nReboot\nShutdown\nSuspend\nExit | dmenu -p 'What Would You Like To Do?')
 
 switch $action
 	case Lock

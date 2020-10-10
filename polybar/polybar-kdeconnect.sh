@@ -1,13 +1,11 @@
-
 #!/usr/bin/env bash
 
 # CONFIGURATION
 LOCATION=0
-YOFFSET=0
-XOFFSET=0
-WIDTH=12
+YOFFSET=100
+XOFFSET=20
+WIDTH=120
 WIDTH_WIDE=24
-THEME=solarized
 
 # Color Settings of Icon shown in Polybar
 COLOR_DISCONNECTED='#000'       # Device Disconnected
@@ -39,7 +37,7 @@ show_devices (){
         then
             battery="$(qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$deviceid org.kde.kdeconnect.device.battery.charge)"
             icon=$(get_icon $battery $devicetype)
-            devices+="%{A1:. $DIR/polybar-kdeconnect.sh; show_menu $devicename $deviceid $battery:}$icon%{A}$SEPERATOR"
+            devices+="%{A1:. $DIR/polybar-kdeconnect.sh; show_menu '$devicename' $deviceid $battery:}$icon%{A}$SEPERATOR"
         elif [ "$isreach" = "false" ] && [ "$istrust" = "true" ]
         then
             devices+="$(get_icon -1 $devicetype)$SEPERATOR"
@@ -47,10 +45,10 @@ show_devices (){
             haspairing="$(qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$deviceid org.kde.kdeconnect.device.hasPairingRequests)"
             if [ "$haspairing" = "true" ]
             then
-                show_pmenu2 $devicename $deviceid
+                show_pmenu2 '$devicename' $deviceid
             fi
             icon=$(get_icon -2 $devicetype)
-            devices+="%{A1:. $DIR/polybar-kdeconnect.sh; show_pmenu $devicename $deviceid $:}$icon%{A}$SEPERATOR"
+            devices+="%{A1:. $DIR/polybar-kdeconnect.sh; show_pmenu '$devicename' $deviceid $:}$icon%{A}$SEPERATOR"
 
         fi
     done
@@ -58,7 +56,7 @@ show_devices (){
 }
 
 show_menu () {
-    menu="$(rofi -sep "|" -dmenu -i -p "$1" -location $LOCATION -yoffset $YOFFSET -xoffset $XOFFSET -theme $THEME -width $WIDTH -hide-scrollbar -line-padding 4 -padding 20 -lines 5 <<< "Battery: $3%|Ping|Find Device|Send File|Unpair")"
+    menu="$(dmenu -i -p "$1" -y $YOFFSET -x $XOFFSET -w $WIDTH -l 5 <<< "Battery: $3%"$'\nPing\nFind Device\nSend File\nUnpair')"
                 case "$menu" in
                     *Ping) qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$2/ping org.kde.kdeconnect.device.ping.sendPing ;; 
                     *'Find Device') qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$2/findmyphone org.kde.kdeconnect.device.findmyphone.ring ;;
@@ -68,14 +66,14 @@ show_menu () {
 }
 
 show_pmenu () {
-    menu="$(rofi -sep "|" -dmenu -i -p "$1" -location $LOCATION -yoffset $YOFFSET -xoffset $XOFFSET -theme $THEME -width $WIDTH -hide-scrollbar -line-padding 1 -padding 20 -lines 4 <<< "Pair Device")"
+    menu="$(dmenu -i -y $YOFFSET -x $XOFFSET -w $WIDTH -l 4 <<< "Pair Device")"
                 case "$menu" in
                     *'Pair Device') qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$2 org.kde.kdeconnect.device.requestPair
                 esac
 }
 
 show_pmenu2 () {
-    menu="$(rofi -sep "|" -dmenu -i -p "$1 has sent a pairing request" -location $LOCATION -yoffset $YOFFSET -xoffset $XOFFSET -theme $THEME -width $WIDTH_WIDE -hide-scrollbar -line-padding 4 -padding 20 -lines 2 <<< "Accept|Reject")"
+    menu="$(dmenu -i -p "$1 has sent a pairing request" -y $YOFFSET -x $XOFFSET -w $WIDTH -l 2 <<< $'Accept\nReject')"
                 case "$menu" in
                     *'Accept') qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$2 org.kde.kdeconnect.device.acceptPairing ;;
                     *) qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$2 org.kde.kdeconnect.device.rejectPairing
@@ -101,3 +99,5 @@ get_icon () {
     esac
     echo $ICON
 }
+
+show_devices

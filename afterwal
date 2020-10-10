@@ -26,8 +26,11 @@ end
 
 pywalfox update &
 #sudo make -C /home/kyle/packages/dwm clean install
-sudo make -C /home/kyle/packages/dmenu clean install 
 #killall dwm
+bspc wm -r
+
+killall dusnt
+startdunst & disown
 
 echo "#!/bin/fish"\n"multilockscreen -l (echo $lock_effect | sed 's/ .*//; s/--//') --off 10s" > $HOME/scripts/lock.sh
 

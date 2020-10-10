@@ -2,7 +2,7 @@
 
 bluetoothctl power on
 set devices (bluetoothctl paired-devices)
-set choice (echo "$devices" | sed 's/ Device /\n/g; s/Device //; s/:[A-Z0-9][A-Z0-9]/:/g; s/[A-Z0-9][A-Z0-9]::::: //g' | awk '{print NR, $0}' | dmenu | awk '{print $1}')
+set choice (echo "$devices" | sed 's/ Device /\n/g; s/Device //; s/:[A-Z0-9][A-Z0-9]/:/g; s/[A-Z0-9][A-Z0-9]::::: //g' | awk '{print NR, $0}' | dmenu -i | awk '{print $1}')
 
 test "$choice" = "" && exit 0
 
